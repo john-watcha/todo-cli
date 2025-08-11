@@ -1,0 +1,57 @@
+#!/usr/bin/env ruby
+# encoding: UTF-8
+
+# 실행 파일의 경로 확인
+APP_PATH = File.expand_path('..', __dir__)
+
+# 앱 경로를 로드 경로에 추가하여 필요한 라이브러리 로드
+$LOAD_PATH.unshift(File.join(APP_PATH, 'lib'))
+$LOAD_PATH.unshift(APP_PATH) unless $LOAD_PATH.include?(APP_PATH)
+
+# Bundler 설정
+require 'bundler/setup'
+Bundler.require
+
+# 기본 인코딩을 UTF-8로 설정
+Encoding.default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8
+
+# 필요한 라이브러리 로드
+require 'lib/storage'
+require 'lib/task'
+require 'lib/todo_app'
+require 'lib/ui'
+
+# 앱 실행에 필요한 gem 설치 확인
+begin
+  require 'curses'
+rescue LoadError
+  puts "필요한 gem이 설치되어 있지 않습니다. 설치하려면 다음 명령어를 실행하세요:"
+  puts "bundle install"
+  exit 1
+end
+
+# 기본 데이터 디렉토리 및 파일 경로 설정
+DATA_DIR = File.join(Dir.home, '.todo-cli')
+TASKS_FILE = File.join(DATA_DIR, 'tasks.md')
+
+# 데이터 디렉토리가 없으면 생성
+Dir.mkdir(DATA_DIR) unless Dir.exist?(DATA_DIR)
+
+begin
+  # 앱 초기화
+  storage = Storage.new(TASKS_FILE)
+  app = TodoApp.new(storage)
+  ui = UI.new
+
+  # 앱 실행
+  ui.run(app)
+rescue => e
+  # 오류 발생 시 Curses 화면을 닫고 오류 메시지 출력
+  Curses.close_screen if defined?(Curses) && Curses.stdscr
+  puts "오류가 발생했습니다: #{e.message}"
+  puts e.backtrace
+ensure
+  # 프로그램 종료 시 Curses 화면 정리
+  ui.close if defined?(ui)
+end

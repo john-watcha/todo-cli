@@ -1,0 +1,45 @@
+# Ruby 관련 파일 무시
+*.gem
+*.rbc
+/.config
+/coverage/
+/InstalledFiles
+/pkg/
+/spec/reports/
+/spec/examples.txt
+/test/tmp/
+/test/version_tmp/
+/tmp/
+
+# 문서 관련 파일 무시
+/.yardoc/
+/_yardoc/
+/doc/
+/rdoc/
+
+# 환경 설정 무시
+/.bundle/
+/vendor/bundle
+/lib/bundler/man/
+
+# macOS 관련 파일 무시
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+
+# 사용자 데이터 폴더 무시 (필요한 경우)
+# ~/.todo-cli/
+
+# IDE 관련 파일 무시
+.idea/
+.vscode/
+*.swp
+*.swo
