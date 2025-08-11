@@ -35,7 +35,7 @@ if __FILE__ == $0
     # 앱 초기화
     storage = Storage.new(TASKS_FILE)
     app = TodoApp.new(storage)
-    ui = UI.new
+    ui = UI.new(DATA_DIR)  # DATA_DIR 전달
 
     # 앱 실행
     ui.run(app)
