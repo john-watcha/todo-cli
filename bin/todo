@@ -19,6 +19,7 @@ Encoding.default_internal = Encoding::UTF_8
 # 필요한 라이브러리 로드
 require 'lib/storage'
 require 'lib/task'
+require 'lib/history'
 require 'lib/todo_app'
 require 'lib/ui'
 
@@ -41,8 +42,8 @@ Dir.mkdir(DATA_DIR) unless Dir.exist?(DATA_DIR)
 begin
   # 앱 초기화
   storage = Storage.new(TASKS_FILE)
-  app = TodoApp.new(storage)
-  ui = UI.new
+  app = TodoApp.new(storage, DATA_DIR)  # DATA_DIR 전달
+  ui = UI.new(DATA_DIR)  # DATA_DIR 전달
 
   # 앱 실행
   ui.run(app)
