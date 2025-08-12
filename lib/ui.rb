@@ -274,7 +274,12 @@ class UI
     title = get_string("새 할일 제목: ")
     return if title.nil? || title.empty?
 
-    app.add_task(title)
+    # 기존: app.add_task(title)
+    # 변경: 현재 커서 위치에 작업 추가
+    app.add_task_at_cursor(title, @current_index)
+    
+    # 새 작업 추가 후 커서는 다음 위치(방금 추가한 작업 바로 다음)로 이동
+    @current_index += 1
   end
 
   # 작업 편집 대화상자

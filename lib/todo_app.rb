@@ -38,6 +38,27 @@ class TodoApp
     task
   end
 
+  # 커서 위치에 새 할일 추가
+  def add_task_at_cursor(title, cursor_position)
+    id = @tasks.empty? ? 0 : @tasks.last.id + 1
+    task = Task.new(
+      id: id,
+      title: title,
+      completed: false
+    )
+
+    # 커서 위치에 새 작업 추가
+    @tasks.insert(cursor_position, task)
+
+    # ID 재할당 (순서가 변경되었으므로)
+    @tasks.each_with_index { |task, idx| task.id = idx }
+
+    save_tasks
+    @history.record_action('add_at_cursor', @tasks)
+
+    task
+  end
+
   # 할일 삭제
   def delete_task(index)
     return if index < 0 || index >= @tasks.size
