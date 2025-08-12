@@ -79,6 +79,20 @@ class UI
         break
       when 'h', 'H'  # 도움말
         show_help_screen
+      when 'Z'  # Shift+Z로 작업 취소
+        # undo 기능 실행
+        if app.undo
+          # UI 상태 업데이트 (커서 위치가 유효한지 확인)
+          @current_index = [[@current_index, app.tasks.size - 1].min, 0].max if !app.tasks.empty?
+          @current_index = 0 if app.tasks.empty?
+        end
+      when 'R'  # Shift+R로 작업 다시 실행
+        # redo 기능 실행
+        if app.redo
+          # UI 상태 업데이트 (커서 위치가 유효한지 확인)
+          @current_index = [[@current_index, app.tasks.size - 1].min, 0].max if !app.tasks.empty?
+          @current_index = 0 if app.tasks.empty?
+        end
       end
     end
   end
@@ -214,6 +228,8 @@ class UI
       ["A", "새 할일 추가"],
       ["E", "선택한 할일 편집"],
       ["D", "선택한 할일 삭제"],
+      ["Shift+Z", "작업 취소 (최대 100개까지)"],
+      ["Shift+R", "작업 다시 실행 (최대 100개까지)"],
       ["H", "이 도움말 화면 표시"],
       ["Q", "앱 종료"]
     ]
@@ -227,6 +243,8 @@ class UI
     # 파일 위치 정보
     Curses.setpos(8 + keys.size + 2, 2)
     Curses.addstr("할일은 #{File.expand_path(@data_dir)} 디렉토리에 저장됩니다.")
+    Curses.setpos(8 + keys.size + 3, 2)
+    Curses.addstr("작업 기록은 #{File.expand_path(File.join(@data_dir, '.todo_history.json'))}에 저장됩니다.")
 
     # 닫기 안내
     Curses.setpos(Curses.lines - 3, 2)
